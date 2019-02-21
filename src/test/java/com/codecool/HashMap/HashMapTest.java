@@ -63,4 +63,15 @@ class HashMapTest {
         assertThrows(NoSuchElementException.class, () -> map.getValue("bird"));
     }
 
+    @Test
+    public void testRemoveElement() {
+        map.add("dog", "Pluto");
+        map.add("duck", "Donald");
+        map.add("bird", "Tweety");
+
+        map.remove("bird");
+
+        assertThrows(NoSuchElementException.class, () -> map.getValue("bird"));
+    }
+
 }
