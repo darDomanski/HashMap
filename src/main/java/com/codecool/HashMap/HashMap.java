@@ -48,6 +48,21 @@ public class HashMap<K, V> {
         throw new NoSuchElementException("Can't find value assigned to the key!");
     }
 
+    public void remove(K key) {
+        int hash = getHash(key);
+        SinglyLinkedList<KeyValue<K, V>> listOfPotentialValues = elements[hash];
+        KeyValue<K, V> nodeToDelete = null;
+
+        for (int i = 0; i < listOfPotentialValues.getLength(); i++) {
+            KeyValue<K, V> node = listOfPotentialValues.get(i);
+            if (node.getKey().equals(key)) {
+                nodeToDelete = node;
+            }
+        }
+        listOfPotentialValues.remove(nodeToDelete);
+
+    }
+
 
     private void checkIfKeyExists(SinglyLinkedList<KeyValue<K, V>> keyValues, K key) {
         if (keyValues.getLength() > 0) {
