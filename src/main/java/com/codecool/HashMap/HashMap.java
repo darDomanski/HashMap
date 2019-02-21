@@ -5,11 +5,13 @@ import com.codecool.LinkedLists.SinglyLinkedList.SinglyLinkedList;
 import java.util.NoSuchElementException;
 
 public class HashMap<K, V> {
-    private int size = 16;
+    private int size = 2;
     private SinglyLinkedList<KeyValue<K, V>>[] elements;
+    private int amountOfElements;
 
     public HashMap() {
         this.elements = new SinglyLinkedList[size];
+        this.amountOfElements = 0;
     }
 
     public void add(K key, V value) throws IllegalStateException {
@@ -24,6 +26,9 @@ public class HashMap<K, V> {
 
         keyValues.add(new KeyValue<>(key, value));
         elements[index] = keyValues;
+
+        amountOfElements++;
+        resizeIfNeeded();
 
     }
 
@@ -57,5 +62,31 @@ public class HashMap<K, V> {
     private int getHash(K key) {
         int hash = Math.abs(key.hashCode() % size);
         return hash;
+    }
+
+    private void resizeIfNeeded() {
+        int newSize;
+        if (amountOfElements > size * 2) {
+            newSize = 2 * size;
+            recreateElements(newSize);
+        } else if (amountOfElements < size / 2) {
+            newSize = size / 2;
+            recreateElements(newSize);
+        }
+    }
+
+    private void recreateElements(int newSize) {
+        SinglyLinkedList<KeyValue<K, V>>[] oldElements = elements;
+        SinglyLinkedList<KeyValue<K, V>>[] newElements = new SinglyLinkedList[newSize];
+        size = newSize;
+        elements = newElements;
+
+        for (SinglyLinkedList<KeyValue<K, V>> elementsList : oldElements) {
+            if (elementsList != null) {
+                for (int i = 0; i < elementsList.getLength(); i++) {
+                    add(elementsList.get(i).getKey(), elementsList.get(i).getValue());
+                }
+            }
+        }
     }
 }
